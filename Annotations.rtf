@@ -1,0 +1,991 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil Courier New;}{\f2\fnil\fcharset0 Courier New;}{\f3\fnil Calibri;}}
+{\colortbl ;\red100\green100\blue100;\red0\green0\blue0;\red127\green0\blue85;\red0\green0\blue192;\red106\green62\blue62;\red42\green0\blue255;\red63\green127\blue95;\red0\green0\blue255;\red209\green99\blue73;\red147\green161\blue161;\red42\green161\blue152;}
+{\*\generator Riched20 10.0.22000}\viewkind4\uc1 
+\pard\sl240\slmult1\b\f0\fs28\lang9 Spring is a popular Java application framework for creating enterprise applications. Spring Boot is the next step in evolution of Spring framework. It helps create stand-alone, production-grade Spring based applications with minimal effort. It does not use XML configurations anymore and implements the convention over configuration principle.\par
+\par
+Annotation is a form of metadata which provides data about a program that is not part of the program itself. Annotations do not have direct effect on the operation of the code they annotate.\par
+\par
+Persistent Data: \b0\i denotes information that is infrequently accessed and not likely to be modified. Java classes whose objects or instances will be stored in database tables are called persistent classes, Persistent class are POJO, Model, or class using the getter/setter or Bean or method)\par
+\par
+\b\i0 @Component annotation: \b0 is a generic stereotype for a Spring managed component. It turns the class into a Spring bean at the auto-scan time. Classes decorated with this annotation are considered as candidates for auto-detection when using annotation-based configuration and classpath scanning. @Repository, @Service, and @Controller are specializations of @Component for more specific use cases.\par
+\par
+\b @Bean annotation: \b0 indicates that a method produces a bean to be managed by Spring.\par
+\par
+\b @Service annotation: \b0 indicates that an annotated class is a service class.\par
+\par
+\b @Configuration annotation: \b0 indicates that a class is a configuration class that may contain bean definitions.\par
+\par
+\b @Autowired annotation: \b0 marks a constructor, field, or setter method to be autowired by Spring dependency injection.\par
+\par
+\b @SpringBootApplication annotation: \b0 enables auto-configuration and component scanning.\par
+\par
+\b @Repository annotation: \b0 is used to define a repository. OR indicates that an annotated class is a repository, which is an abstraction of data access and storage. Where City (City.java) is bean/model/POJO/ class, which have getter/setter method.\par
+\par
+\cf1\f1\fs24 @\cf2 Repository\cf0\par
+\cf3\b public\cf2\b0  \cf3\b interface\cf2\b0  CityRepository \cf3\b extends\cf2\b0  CrudRepository<City, Long> \{\cf0\par
+\par
+\cf2\}\cf0\par
+\f0\fs28\par
+\cf3\b\f1\fs24 public\cf2\b0  \cf3\b interface\cf2\b0  ICityService \{\cf0\par
+\cf2     List<City> findAll();\cf0\par
+\cf2\}\par
+\cf0\par
+\f0\fs28 ICityService provides a contract(abstraction) method to get all cities.\par
+\par
+\par
+\b @Service annotation: \b0 declares CityService to be a service class: a class that provides business services. The optional @Autowired annotation marks cityRepository field to be injected with CityRepository.\par
+\par
+\cf1\b\f1\fs24 @\cf2 Service\cf0\par
+\cf3 public\cf2\b0  \cf3\b class\cf2\b0  CityService \cf3\b implements\cf2\b0  ICityService \{\cf0\par
+\par
+\cf2   \cf3\b private\cf2\b0  \cf3\b final\cf2\b0  CityRepository \cf4 cityRepository\cf2 ;\cf0\par
+\par
+\cf2   \cf1 @\cf2 Autowired\cf0\par
+\cf2   \cf3\b public\cf2\b0  CityService(CityRepository \cf5 cityRepository\cf2 ) \{\cf0\par
+\cf2     \cf3\b this\cf2\b0 .\cf4 cityRepository\cf2  = \cf5 cityRepository\cf2 ;\cf0\par
+\cf2   \}\cf0\par
+\par
+\cf2   \cf1 @Override\cf0\par
+\cf2   \cf3\b public\cf2\b0  List<City> findAll() \{\cf0\par
+\cf2     \cf3\b return\cf2\b0  (List<City>) \cf4 cityRepository\cf2 .findAll();\cf0\par
+\cf2   \}\cf0\par
+\cf2\}\cf0\f0\fs28\par
+\par
+\b @Controller annotation \b0 marks a class as a web controller, capable of handling the requests.\par
+ \par
+\cf1\f1\fs24 @\cf2 Controller\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  MyController \{\cf0\par
+\cf2  \cf3\b private\cf2\b0  \cf3\b final\cf2\b0  ICityService \cf4 cityService\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2  \cf1 @\cf2 Autowired\cf0\par
+\cf2  \cf3\b public\cf2\b0  MyController(ICityService \cf5 cityService\cf2 ) \{\cf0\par
+\cf2    \cf3\b this\cf2\b0 .\cf4 cityService\cf2  = \cf5 cityService\cf2 ;\cf0\par
+\cf2  \}\cf0\par
+\par
+\cf2  \cf1 @\cf2 RequestMapping(\cf6 "/"\cf2 )\cf0\par
+\cf2  \cf3\b public\cf2\b0  String index(Model \cf5 model\cf2 ) \{\cf0\par
+\cf2         \cf3\b return\cf2\b0  \cf6 "index"\cf2 ;\cf0\par
+\cf2  \}\cf0\par
+\cf2\par
+ \cf1 @\cf2 RequestMapping(\cf6 "/cities"\cf2 )\cf0\par
+\cf2  \cf3\b public\cf2\b0  ModelAndView showCities() \{\cf0\par
+\cf2    \cf3\b var\cf2\b0  \cf5 cities\cf2  = \cf4 cityService\cf2 .findAll();\cf0\par
+\cf2    Map<String, Object> \cf5 params\cf2  = \cf3\b new\cf2\b0  HashMap<>();\cf0\par
+\cf2    \cf5 params\cf2 .put(\cf6 "cities"\cf2 , \cf5 cities\cf2 );\cf0\par
+\cf2    \cf3\b return\cf2\b0  \cf3\b new\cf2\b0  ModelAndView(\cf6 "showCities"\cf2 , \cf5 params\cf2 );\cf0\par
+\cf2  \}    \cf0\par
+\cf2\tab\cf0\par
+\cf7\f2\lang1033  \f1\lang9 //form\f2\lang1033  submitting\f1\lang9 ,\f2\lang1033  \f1\lang9 @GetMapping annotation.\cf0\par
+\cf1\f2\lang1033  \f1\lang9 @GetMapping\cf2 (\cf6 "/"\cf2 )\cf0\par
+\cf3\b\f2\lang1033  \f1\lang9 private\cf2\b0  String customhome() \{\cf0\par
+\cf2\f2\lang1033    \cf3\b\f1\lang9 return\cf2\b0  \cf6 "\f2\lang1033 f\f1\lang9 orm"\cf2 ;  \cf7 //return the form.jsp\cf0\par
+\cf2\f2\lang1033  \f1\lang9\}\cf0\par
+\par
+\cf2\f2\lang1033  \cf1\f1\lang9 @\cf2 RequestMapping(\cf6 "/customdetail"\cf2 )\tab\tab\cf0\par
+\cf3\b\f2\lang1033  \f1\lang9 private\cf2\b0  \b ModelAndView \b0 customerView(\par
+\f2\lang1033          \cf1\f1\lang9 @RequestParam\cf2 (\cf6 "cid"\cf2 )String \cf5 cid\cf2 , \f2\lang1033   \par
+         \cf1\f1\lang9 @RequestParam\cf2 (\cf6 "cname"\cf2 )String \cf5 cname\cf2 , \par
+\f2\lang1033          \cf1\f1\lang9 @RequestParam\cf2 (\cf6 "cemail"\cf2 )String \cf5 cemail\cf2 ) \{\cf0\par
+\f2\lang1033    \cf2\b\f1\lang9 ModelAndView \cf5 mv\cf2  = \cf3 new\cf2  ModelAndView();\cf0\b0\par
+\cf2\tab\cf5 mv\cf2 .addObject(\cf6 "cid"\cf2 , \cf5 cid\cf2 );\cf0\par
+\cf2\tab\cf5 mv\cf2 .addObject(\cf6 "cname"\cf2 , \cf5 cname\cf2 );\cf0\par
+\cf2\tab\cf5 mv\cf2 .addObject(\cf6 "cemail"\cf2 , \cf5 cemail\cf2 );\cf0\par
+\cf2\tab\cf5 mv\cf2 .setViewName(\cf6 "view\f2\lang1033 .jsp\f1\lang9 "\cf2 );  \cf7 //return\f2\lang1033  \f1\lang9 view.jsp\cf0\par
+\cf2\f2\lang1033  \f1\lang9   \cf3\b return\cf2\b0  \cf5 mv\cf2 ;  \cf0\par
+\cf2\f2\lang1033  \f1\lang9\}\cf0\par
+\cf2\tab\cf0\par
+\cf7\f2\lang1033  /\f1\lang9 /OR\tab\cf0\par
+\cf7\f2\lang1033  \f1\lang9 //ModelMap\f2\lang1033  used\f1\lang9  \f2\lang1033 to \f1\lang9 post\f2\lang1033  the\f1\lang9  data to view page\cf0\par
+\cf1\f2\lang1033  \f1\lang9 @PostMapping\cf2 (\cf6 "/customdetail"\cf2 )\cf0\par
+\cf3\b\f2\lang1033  \f1\lang9 private\cf2\b0  String customerView(\par
+\f2\lang1033        \cf1\f1\lang9 @RequestParam\cf2 (\cf6 "cid"\cf2 )String \cf5 cid\cf2 , \line\f2\lang1033        \cf1\f1\lang9 @RequestParam\cf2 (\cf6 "cname"\cf2 )String \cf5 cname\cf2 , \cf0\par
+\cf2\f2\lang1033        \cf1\f1\lang9 @RequestParam\cf2 (\cf6 "cemail"\cf2 )String \cf5 cemail\cf2 , \par
+\f2\lang1033        \b\f1\lang9 ModelMap \cf5 modelmap\cf2\b0 ) \{\par
+\f2\lang1033    \cf5\f1\lang9 modelmap\cf2 .put(\cf6 "cid"\cf2 , \cf5 cid\cf2 );\cf0\par
+\cf2\f2\lang1033    \cf5\f1\lang9 modelmap\cf2 .put(\cf6 "cname"\cf2 , \cf5 cname\cf2 );\cf0\par
+\cf2\f2\lang1033    \cf5\f1\lang9 modelmap\cf2 .put(\cf6 "cemail"\cf2 , \cf5 cemail\cf2 );\tab     \cf0\par
+\cf2\f2\lang1033    \cf3\b\f1\lang9 return\cf2\b0  \cf6 "customview"\cf2 ;  \cf7 //return the customerview.jsp\cf0\par
+\cf2\f2\lang1033  \f1\lang9\}\cf0\par
+\cf2\}\cf0\par
+\f0\fs28\par
+\b @RequestMapping annotation \b0 maps HTTP request with a path to a controller method. In the second case, it maps the /cities URL to the showCities() method.\par
+\par
+\par
+\par
+\par
+Check this site for more refrences:\par
+{{\field{\*\fldinst{HYPERLINK https://www.javaguides.net/p/spring-annotations-examples.html }}{\fldrslt{https://www.javaguides.net/p/spring-annotations-examples.html\ul0\cf0}}}}\f0\fs28\par
+\par
+\par
+\par
+\par
+
+\pard\sl240\slmult1\qc\b\fs40 All Spring Annotations ASAP Cheat Sheet [Core+Boot][2019]\par
+
+\pard\sl240\slmult1\b0\fs28\par
+
+\pard\sl240\slmult1\qc\b\fs32 Table Of Contents  hide \par
+
+\pard\sl240\slmult1\fs28 1) Spring Core Annotations\par
+
+\pard\li360\sl240\slmult1\tx360\b0 1.1) @Configuration\par
+1.2) @ComponentScan\par
+1.3) @Autowired\par
+1.4) @Component\par
+1.5) @Bean\par
+1.6) @Qualifier\par
+1.7) @Primary\par
+1.8) @Required\par
+1.9) @Value\par
+1.10) @DependsOn\par
+1.11) @Lazy\par
+1.12) @Lookup\par
+1.13) @Scope\par
+1.14) @Profile\par
+1.15) @Import\par
+1.16) @ImportResource\par
+1.17) @PropertySource\par
+
+\pard\sl240\slmult1\par
+\b 2) Spring MVC Annotations\par
+
+\pard\li360\sl240\slmult1\b0 2.1) @Controller\par
+2.2) @Service\par
+2.3) @Repository\par
+2.4) @RequestMapping\par
+2.5) @RequestBody\par
+2.6) @GetMapping\par
+2.7) @PostMapping\par
+2.8) @PutMapping\par
+2.9) @DeleteMapping\par
+2.10) @PatchMapping\par
+2.11) @ControllerAdvice\par
+2.12) @ResponseBody\par
+2.13) @ExceptionHandler\par
+2.14) @ResponseStatus\par
+2.15) @PathVariable\par
+2.16) @RequestParam\par
+2.17) @RestController\par
+2.18) @ModelAttribute\par
+2.19) @CrossOrigin\par
+2.20) @InitBinder\par
+
+\pard\sl240\slmult1\par
+\b 3) Spring Boot Annotations\par
+
+\pard\li360\sl240\slmult1\b0 3.1) @SpringBootApplication\par
+3.2) @EnableAutoConfiguration\par
+3.3) @ConditionalOnClass and @ConditionalOnMissingClass\par
+3.4) @ConditionalOnBean and @ConditionalOnMissingBean\par
+3.5) @ConditionalOnProperty\par
+3.6) @ConditionalOnResource\par
+3.7) @ConditionalOnWebApplication and @ConditionalOnNotWebApplication\par
+3.8) @ConditionalExpression\par
+3.9) @Conditional\par
+
+\pard\sl240\slmult1\par
+\b 4) JPA  Annotations\par
+
+\pard\li360\sl240\slmult1\b0 4.1) @Entity annotation\par
+4.2) @Id annotation\par
+4.3) @GeneratedValue annotation\par
+4.4) @Table annotation\par
+4.5) @Column  annotation\par
+4.6) @Transient annotation\par
+4.7) @Temporal annotation\par
+4.8) @Enumerated annotation\par
+
+\pard\sl240\slmult1\par
+\par
+\par
+
+\pard\sl240\slmult1\qc\b\fs40 Spring Core Annotations\par
+
+\pard\sl240\slmult1\cf9\fs28 @Configuration\par
+\cf0\b0 @Configuration is used on classes that define beans. @Configuration is an analog for an XML configuration file \f3\endash  it is configured using Java classes. A Java class annotated with @Configuration is a configuration by itself and will have methods to instantiate and configure the dependencies.\par
+\par
+\cf9\b @ComponentScan\par
+\cf0\b0 @ComponentScan is used with the @Configuration annotation to allow Spring to know the packages to scan for annotated components. @ComponentScan is also used to specify base packages using basePackageClasses or basePackage attributes to scan. If specific packages are not defined, scanning will occur from the package of the class that declares this annotation.\par
+\par
+\cf9\b @Autowired\par
+\cf0\b0 @Autowired is used to mark a dependency which Spring is going to resolve and inject automatically. We can use this annotation with a constructor, setter, or field injection.\par
+\par
+\cf9\b @Component\par
+\cf0\b0 @Component is used on classes to indicate a Spring component. The @Component annotation marks the Java class as a bean or component so that the component-scanning mechanism of Spring can add it into the application context.\par
+\par
+\cf9\b @Bean\par
+\cf0\b0 @Bean is a method-level annotation and a direct analog of the XML element. @Bean marks a factory method which instantiates a Spring bean. Spring calls these methods when a new instance of the return type is required.\par
+\par
+\cf9\b @Qualifier\par
+\cf0\b0 @Qualifier helps fine-tune annotation-based autowiring. There may be scenarios when we create more than one bean of the same type and want to wire only one of them with a property. This can be controlled using @Qualifier annotation along with the @Autowired annotation.\par
+We use @Qualifier along with @Autowired to provide the bean ID or bean name we want to use in ambiguous situations.\par
+\par
+\cf9\b @Primary\par
+\cf0\b0 We use @Primary to give higher preference to a bean when there are multiple beans of the same type. When a bean is not marked with @Qualifier, a bean marked with @Primary will be served in case on ambiquity.\par
+\par
+\cf9\b @Required\par
+\cf0\b0 The @Required annotation is method-level annotation, and shows that the setter method must be configured to be dependency-injected with a value at configuration time.\par
+@Required on setter methods to mark dependencies we want to populate through XML; Otherwise, BeanInitializationException will be thrown.\par
+\par
+\cf9\b @Value\par
+\cf0\b0 Spring @Value annotation is used to assign default values to variables and method arguments. We can read spring environment variables as well as system variables using @Value annotation.\par
+We can use @Value for injecting property values into beans. It\rquote s compatible with the constructor, setter, and field injection.\par
+\par
+\cf9\b @DependsOn\par
+\cf0\b0 @DependsOn makes Spring initialize other beans before the annotated one. Usually, this behavior is automatic, based on the explicit dependencies between beans.\par
+The @DependsOn annotation may be used on any class directly or indirectly annotated with @Component or on methods annotated with @Bean.\par
+\par
+\cf9\b @Lazy\par
+\cf0\b0 @Lazy makes beans to initialize lazily. By default, the Spring IoC container creates and initializes all singleton beans at the time of application startup.\par
+@Lazy annotation may be used on any class directly or indirectly annotated with @Component or on methods annotated with @Bean.\par
+\par
+\cf9\b @Lookup\par
+\cf0\b0 A method annotated with @Lookup tells Spring to return an instance of the method\rquote s return type when we invoke it.\par
+\par
+\cf9\b @Scope\par
+\cf0\b0 @Scope is used to define the scope of a @Component class or a @Bean definition. It can be either singleton, prototype, request, session, globalSession or some custom scope.\par
+\par
+\cf9\b @Profile\par
+\cf0\b0 Beans marked with @Profile will be initialized in the container by Spring only when that profile is active. By Default, all beans has \ldblquote default\rdblquote  value as Profile. We can configure the name of the profile with the value argument of the annotation.\par
+\par
+\cf9\b @Import\par
+\cf0\b0 @Import allows to use specific @Configuration classes without component scanning. We can provide those classes with @Import\lquote s value argument.\par
+\par
+\cf9\b @ImportResource\par
+\cf0\b0 @ImportResource allows to import XML configurations with this annotation. We can specify the XML file locations with the locations argument, or with its alias, the value argument.\par
+\par
+\cf9\b @PropertySource\par
+\cf0\b0 @PropertySource annotation provides a convenient and declarative mechanism for adding a PropertySource to Spring\rquote s Environment. To be used in conjunction with @Configuration classes.\par
+\par
+ \par
+
+\pard\sl240\slmult1\qc\b\fs40 Spring MVC Annotations\par
+
+\pard\sl240\slmult1\cf9\fs28 @Controller\par
+\cf0\b0 The @Controller annotation is used to indicate the class is a Spring controller. This annotation is simply a specialization of the @Component class and allows implementation classes to be auto-detected through the class path scanning.\par
+\par
+\cf9\b @Service\par
+\cf0\b0 @Service marks a Java class that performs some service, such as executing business logic, performing calculations, and calling external APIs. This annotation is a specialized form of the @Component annotation intended to be used in the service layer.\par
+\par
+\cf9\b @Repository\par
+\cf0\b0 This annotation is used on Java classes that directly access the database. The @Repository annotation works as a marker for any class that fulfills the role of repository or Data Access Object. This annotation has an automatic translation feature. For example, when an exception occurs in the @Repository, there is a handler for that exception and there is no need to add a try-catch block.\par
+\par
+\cf9\b @RequestMapping\par
+
+\pard\sl240\slmult1\tx8640\tx8910\cf0\b0 @RequestMapping marks request handler methods inside @Controller classes. It accepts below options:\par
+\i path/name/value\i0 : which URL the method is mapped to.\par
+method: compatible HTTP methods.\par
+params: filters requests based on presence, absence, or value of HTTP parameters.\par
+headers: filters requests based on presence, absence, or value of HTTP headers.\par
+consumes: which media types the method can consume in the HTTP request body.\par
+produces: which media types the method can produce in the HTTP response body.\par
+\par
+@RequestMapping(method = RequestMethod.GET, value = "/path") - The @RequestMapping(method = RequestMethod.GET, value = "/path") annotation specifies a method in the controller that should be responsible for serving the HTTP request to the given path. Spring will work the implementation details of how it's done. You simply specify the path value on the annotation and Spring will route the requests into the correct action methods.\par
+
+\pard\sl240\slmult1\par
+\par
+\cf9\b @RequestBody\par
+\cf0\b0 @RequestBody indicates a method parameter should be bound to the body of the web request. It maps the body of the HTTP request to an object. The body of the request is passed through an HttpMessageConverter to resolve the method argument depending on the content type of the request. The deserialization is automatic and depends on the content type of the request.\par
+\par
+\cf9\b @GetMapping\par
+\cf0\b0 @GetMapping is used for mapping HTTP GET requests onto specific handler methods.\par
+Specifically, @GetMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.GET).\par
+\par
+\cf9\b @PostMapping\par
+\cf0\b0 @PostMapping is used for mapping HTTP POST requests onto specific handler methods.\par
+Specifically, @PostMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.POST).\par
+\par
+\cf9\b @PutMapping\par
+\cf0\b0 @PutMapping is used for mapping HTTP PUT requests onto specific handler methods.\par
+Specifically, @PutMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.PUT).\par
+\par
+\cf9\b @DeleteMapping\par
+\cf0\b0 @DeleteMapping is used for mapping HTTP DELETE requests onto specific handler methods.\par
+Specifically, @DeleteMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.DELETE).\par
+\par
+\cf9\b @PatchMapping\par
+\cf0\b0 @PatchMapping is used for mapping HTTP PATCH requests onto specific handler methods.\par
+Specifically, @PatchMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.PATCH).\par
+\par
+\cf9\b @ControllerAdvice\par
+\cf0\b0 @ControllerAdvice is applied at the class level. For each controller, you can use @ExceptionHandler on a method that will be called when a given exception occurs. But this handles only those exceptions that occur within the controller in which it is defined. To overcome this problem, you can now use the @ControllerAdvice annotation. This annotation is used to define @ExceptionHandler, @InitBinder, and @ModelAttribute methods that apply to all @RequestMapping methods. Thus, if you define the @ExceptionHandler annotation on a method in a @ControllerAdvice class, it will be applied to all the controllers.\par
+\par
+\cf9\b @ResponseBody\par
+\cf0\b0 @ResponseBody on a request handler method tells Spring to converts the return value and writes it to the HTTP response automatically. It tells Spring to treat the result of the method as the response itself.\par
+The @ResponseBody annotation tells a controller that the object returned is automatically serialized into JSON and passed back into the HttpResponse object. If we annotate a @Controller class with this annotation, all request handler methods will use it.\par
+\par
+\cf9\b @ExceptionHandler\par
+\cf0\b0 @ExceptionHandler is used to declare a custom error handler method. Spring calls this method when a request handler method throws any of the specified exceptions.\par
+The caught exception can be passed to the method as an argument.\par
+\par
+\cf9\b @ResponseStatus\par
+\cf0\b0 @ResponseStatus is used to specify the desired HTTP status of the response if we annotate a request handler method with this annotation. We can declare the status code with the code argument, or its alias, the value argument.\par
+\par
+\cf9\b @PathVariable\par
+\cf0\b0 @PathVariable is used to indicates that a method argument is bound to a URI template variable. We can specify the URI template with the @RequestMapping annotation and bind a method argument to one of the template parts with @PathVariable.\par
+\par
+@PathVariable("placeholderName") - Another common way to provide information to the backend is to encode it in the URL. Then you can use the @PathVariable("placeholderName") annotation to bring the values from the URL to the method arguments.\par
+\par
+\cf9\b @RequestParam\par
+\cf0\b0 @RequestParam indicates that a method parameter should be bound to a web request parameter. We use @RequestParam for accessing HTTP request parameters. With @RequestParam we can specify an injected value when Spring finds no or empty value in the request. To achieve this, we have to set the defaultValue argument.\par
+\par
+@RequestParam(value="name", defaultValue="World") - Naturally, the methods handling the requests might take parameters. To help you with binding the HTTP parameters into the action method arguments, you can use the @RequestParam(value="name", defaultValue="World") annotation. Spring will parse the request parameters and put the appropriate ones into your method arguments.\par
+\par
+\cf9\b @RestController\par
+\cf0\b0 @RestController combines @Controller and @ResponseBody. By annotating the controller class with @RestController annotation, we no longer need to add @ResponseBody to all the request mapping methods.\f0\lang1033  This means that all the action methods in the marked class will return the JSON response.\f3\lang9\par
+\par
+\cf9\b @ModelAttribute\par
+\cf0\b0 @ModelAttribute is used to access elements that are already in the model of an MVC @Controller, by providing the model key.\par
+\par
+\cf9\b @CrossOrigin\par
+\cf0\b0 @CrossOrigin enables cross-domain communication for the annotated request handler methods. If we mark a class with it, it applies to all request handler methods in it. We can fine-tune CORS behavior with this annotation\rquote s arguments.\par
+\par
+\cf9\b @InitBinder\par
+\cf0\b0 @InitBinder is a method-level annotation that plays the role of identifying the methods that initialize the WebDataBinder \emdash  a DataBinder that binds the request parameter to Java Bean objects. To customize request parameter data binding, you can use @InitBinder annotated methods within our controller. The methods annotated with @InitBinder include all argument types that handler methods support.\par
+\par
+The @InitBinder annotated methods will get called for each HTTP request if we don\rquote t specify the value element of this annotation. The value element can be a single or multiple form names or request parameters that the init binder method is applied to.\par
+\par
+
+\pard\sl240\slmult1\qc\b\fs40 Spring Boot Annotations\par
+
+\pard\sl240\slmult1\cf9\fs28 @SpringBootApplication\par
+\cf0\b0 @SpringBootApplication marks the main class of a Spring Boot application. This is used usually on a configuration class that declares one or more @Bean methods and also triggers auto-configuration and component scanning.\par
+The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration, and @ComponentScan with their default attributes.\par
+\par
+\cf9\b @Configuration and @ComponentScan\par
+\cf0\b0 The @Configuration and @ComponentScan annotations that we described above make Spring create and configure the beans and components of your application. It's a great way to decouple the actual business logic code from wiring the app together.\par
+\par
+\cf9\b @EnableAutoConfiguration\par
+\cf0\b0 @EnableAutoConfiguration tells Spring Boot to look for auto-configuration beans on its classpath and automatically applies them. It tells Spring Boot to \ldblquote guess\rdblquote  how you want to configure Spring based on the jar dependencies that you have added.\par
+Since spring-boot-starter-web dependency added to classpath leads to configure Tomcat and Spring MVC, the auto-configuration assumes that you are developing a web application and sets up Spring accordingly. This annotation is used with @Configuration.\par
+\par
+\cf9\b @ConditionalOnClass and @ConditionalOnMissingClass\par
+\cf0\b0 The @ConditionalOnClass and @ConditionalOnMissingClass annotations let configuration be included based on the presence or absence of specific classes. With these annotations, Spring will only use the marked auto-configuration bean if the class in the annotation\rquote s argument is present/absent.\par
+\par
+\cf9\b @ConditionalOnBean and @ConditionalOnMissingBean\par
+\cf0\b0 @ConditionalOnBean and @ConditionalOnMissingBean annotations let a bean be included based on the presence or absence of specific beans.\par
+\par
+\cf9\b @ConditionalOnProperty\par
+\cf0\b0 @ConditionalOnProperty annotation lets configuration be included based on a Spring Environment property i.e. make conditions on the values of properties.\par
+\par
+\cf9\b @ConditionalOnResource\par
+\cf0\b0 @ConditionalOnResource annotation lets configuration be included only when a specific resource is present.\par
+\par
+\cf9\b @ConditionalOnWebApplication and @ConditionalOnNotWebApplication\par
+\cf0\b0 @ConditionalOnWebApplication and @ConditionalOnNotWebApplication annotations let configuration be included depending on whether the application is a \ldblquote web application\rdblquote . A web application is an application that uses a spring WebApplicationContext, defines a session scope, or has a StandardServletEnvironment.\par
+\par
+\cf9\b @ConditionalExpression\par
+\cf0\b0 @ConditionalExpression is used in more complex situations. Spring will use the marked definition when the SpEL expression is evaluated to true.\par
+\par
+\cf9\b @Conditional\par
+\cf0\b0 @Conditional is used in complex conditions, we can create a class evaluating the custom condition.\f0\par
+\par
+\par
+\par
+\par
+\par
+
+\pard\sl240\slmult1\qc\b\fs40 JPA  Annotation\par
+
+\pard\sl240\slmult1\b0\fs28\par
+\b Required import for JPA annotation:\par
+\cf3\f1\fs24 import\cf2\b0  javax.persistence.Column;   \f2\lang1033        \cf7\f1\lang9 //@Column\cf0\par
+\cf3\b import\cf2\b0  javax.persistence.Entity;    \f2\lang1033       \cf7\f1\lang9 //@Entity\cf0\par
+\cf3\b import\cf2\b0  javax.persistence.GeneratedValue; \f2\lang1033  \cf7\f1\lang9 //@GeneratedValue\cf0\par
+\cf3\b import\cf2\b0  javax.persistence.GenerationType;  \cf7 //GenerationType\cf0\par
+\cf3\b import\cf2\b0  javax.persistence.Id;  \f2\lang1033             \cf7\f1\lang9 //@Id\cf0\par
+\cf3\b import\cf2\b0  javax.persistence.Table;  \f2\lang1033          \cf7\f1\lang9 //@Table\cf2\par
+\cf0\f0\fs28\par
+To Use the JPA annotation, we must define the hibernate properties in application.properties file. Otherwise it will not work.\par
+\b application.properties file\par
+\cf10\b0\f1\fs24 #Hibernate Properties\par
+#Set to true to show SQL generated by the Hibernate\cf0\par
+\cf2\b spring.jpa.show-sql=\cf11 true\cf0\par
+\b0\par
+\cf10 #Set to update, so that whatever changes we will do will be reflected in the schema\cf0\par
+\cf2\b spring.jpa.hibernate.ddl-auto=\cf11 update\cf0\par
+\b0\par
+\cf10 #The SQL dialect makes Hibernate generate better SQL for the chosen database\cf0\par
+\cf2\b spring.jpa.properties.hibernate.dialect=\cf11 org.hibernate.dialect.MySQL5Dialect\cf0\par
+\cf10\b0 #org.hibernate.dialect.MySQ5InnoDBDialect\cf0\fs20\par
+\par
+\cf10 #To format SQL queries generated by Hibernate\cf0\par
+\cf2\b\fs24 spring.jpa.properties.hibernate.format_sql=\cf11 true\cf10\par
+\b0\fs20\par
+\cf0\f0\fs28\par
+\cf9\b @Entity annotation:\par
+\cf0\b0 In JPA @Entity annotation are nothing but POJOs/Model/Getter or Setter/Bean method,  representing data that can be persisted to the database. An \b Entity \b0 represents a table stored in a database. Every instance of an entity represents a row in the table. Entity classes must not be declared final.\par
+\i @Entity, @Table, @Id, and @GeneratedValue, these annotation are also know as Hibernate annotation \i0\par
+\par
+\cf1\b\f1\fs24 @Entity\cf2  \cf0\par
+\cf3 public\cf2\b0  \cf3\b class\cf2\b0  StudentPOJO \{\cf0\par
+\cf2   \cf7 //fields, getters and setters\cf0\par
+\cf2\}\cf0\par
+\f0\fs28\par
+\cf1\f1\fs24 @Entity\cf2 (name=\cf6 "student"\cf2 )\cf0\par
+\f0\fs28 The entity name defaults to the name of the class (StudentPOJO ). We can change its name using the name element:\par
+\par
+\cf9\b @Id annotation: \cf0\b0 is used to defines the primary key. \par
+\par
+\cf9\b @GeneratedValue annotation: \cf0\b0 We can generate the identifiers in different ways, which are specified by the \b @GeneratedValue \b0 annotation. \par
+\par
+We can choose from \b four id generation \b0 strategies with the strategy element. The value can be \b AUTO\b0 , \b TABLE\b0 , \b SEQUENCE\b0 , or \b IDENTITY\b0 .\par
+\par
+@Entity must have a primary key that uniquely identifies it.\par
+\par
+\cf1\f1\fs24 @Entity\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  Student \{\cf0\par
+\cf2\f2\lang1033   \cf1\b\f1\lang9 @Id\cf0\b0\par
+\cf2\f2\lang1033   \cf1\b\f1\lang9 @\cf2 GeneratedValue(strategy=GenerationType.AUTO)\cf0\par
+\cf2\b0   \cf3\b private\cf2\b0  Long \cf4 id\cf2 ;    \cf0\par
+\cf2   \cf3\b private\cf2\b0  String \cf4 name\cf2 ;    \cf0\par
+\cf2   \cf7 //getters and setters\cf0\par
+\cf2\}\cf0\par
+\f0\fs28\par
+If we \b specify \f2\fs24 GenerationType.AUTO\b0\f0\fs28 , the JPA provider will use any strategy it wants to generate the identifiers.\par
+\par
+If we annotate the entity's fields, the JPA provider will use these fields to get and set the entity's state. In addition to Field Access, we can also do Property Access or Mixed Access, which enables us to use both Field and Property access in the same entity.\par
+\par
+\cf9\b @Table Annotation\cf0\b0\par
+In most cases, the name of the table in the database and the name of the entity won't be the same.\par
+\par
+In these cases, we can specify the table name using the @Table annotation:\par
+\par
+\cf1\f1\fs24 @Entity\cf0\par
+\cf1 @Table\cf2 (name=\cf6 "STUDENT"\cf2 )\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  Student \{\cf0\par
+\cf2\f2\lang1033   \cf7\f1\lang9 //fields, getters and setters\cf0\par
+\cf2\}\cf0\par
+\f0\fs28\par
+We can also mention the schema using the schema element:\par
+\par
+\cf1\f1\fs24 @Entity\cf0\par
+\cf1 @Table\cf2 (name=\cf6 "STUDENT"\cf2 , schema=\cf6 "SCHOOL"\cf2 )\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  Student \{\cf0\par
+\cf2   \cf7 //fields, getters and setters\cf0\par
+\cf2\}\cf0\par
+\f0\fs28\par
+Schema name helps to distinguish one set of tables from another.\par
+\par
+If we don't use the @Table annotation, the name of the table will be the name of the entity.\par
+\cf1\f1\fs24 @Table\cf2 (name=\cf6 "STUDENT"\cf2 )\cf0\par
+\cf1 @Table\cf2 (name=\cf6 "STUDENT"\cf2 , schema=\cf6 "SCHOOL"\cf2 )\cf0\f0\fs28\par
+\par
+\par
+\cf9\b @Column  annotation: \cf0\b0 is used to mention the details of a column in the table. The @Column annotation has many elements such as \b name\b0 , \b length\b0 , \b nullable\b0 , and \b unique\b0 :\par
+\par
+\cf1\f1\fs24 @Entity\cf0\par
+\cf1 @Table\cf2 (name=\cf6 "STUDENT"\cf2 )\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  Student \{\cf0\par
+\cf2\f2\lang1033   \cf1\f1\lang9 @Id\cf0\par
+\cf2\f2\lang1033   \cf1\f1\lang9 @\cf2 GeneratedValue(strategy=GenerationType.AUTO)\cf0\par
+\cf2\f2\lang1033   \cf3\b\f1\lang9 private\cf2\b0  Long \cf4 id\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2\f2\lang1033   \cf1\f1\lang9 @Column\cf2 (name=\cf6 "STUDENT_NAME"\cf2 , length=50, nullable=\cf3\b false\cf2\b0 , \f2\lang1033   \line   \f1\lang9 unique=\cf3\b false\cf2\b0 )\cf0\par
+\cf2\f2\lang1033   \cf3\b\f1\lang9 private\cf2\b0  String \cf4 name\cf2 ;\cf0\par
+\cf2   \cf7 //other fields, getters and setters\cf0\par
+\cf2\}\cf0\par
+\f0\fs28\par
+\b The name element \b0 specifies the name of the column in the table. The length element specifies its length. The nullable element specifies whether the column is nullable or not, and the unique element specifies whether the column is unique.\par
+\par
+If we don't specify this annotation, the name of the column in the table will be the name of the field.\par
+\par
+\cf9\b @Transient annotation: \cf0\b0 is used to make a field non-persistent. Transient annotation specifies that the field won't be persisted.\par
+For instance, we can calculate the age of a student from the date of birth.\par
+So let's annotate the field age with the @Transient annotation:\par
+\par
+\cf1\f1\fs24 @Entity\cf0\par
+\cf1 @Table\cf2 (name=\cf6 "STUDENT"\cf2 )\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  Student \{\cf0\par
+\cf2     \cf1 @Id\cf0\par
+\cf2     \cf1 @GeneratedValue\cf2 (strategy=GenerationType.\cf4\b\i AUTO\cf2\b0\i0 )\cf0\par
+\cf2     \cf3\b private\cf2\b0  Long \cf4 id\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2     \cf1 @Column\cf2 (name=\cf6 "STUDENT_NAME"\cf2 , length=50, nullable=\cf3\b false\cf2\b0 )\cf0\par
+\cf2     \cf3\b private\cf2\b0  String \cf4 name\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2     \cf1 @\cf2 Transient\cf0\par
+\cf2     \cf3\b private\cf2\b0  \f2\lang1033 Integer\f1\lang9  \cf4 age\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2     \cf7 //other fields, getters and setters\cf0\par
+\cf2\}\par
+\cf0\f0\fs28\par
+As a result, the field age won't be persisted to the table.\par
+\par
+\cf9\b @Temporal annotation: \cf0\b0 is used to save temporal values in our table\par
+\par
+\cf1\f1\fs24 @Entity\cf0\par
+\cf1 @Table\cf2 (name=\cf6 "STUDENT"\cf2 )\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  Student \{\cf0\par
+\cf2     \cf1 @Id\cf0\par
+\cf2     \cf1 @GeneratedValue\cf2 (strategy=GenerationType.\cf4\b\i AUTO\cf2\b0\i0 )\cf0\par
+\cf2     \cf3\b private\cf2\b0  Long \cf4 id\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2     \cf1 @Column\cf2 (name=\cf6 "STUDENT_NAME"\cf2 , length=50, nullable=\cf3\b false\cf2\b0 , unique=\cf3\b false\cf2\b0 )\cf0\par
+\cf2     \cf3\b private\cf2\b0  String \cf4 name\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2     \cf1 @\cf2 Transient\cf0\par
+\cf2     \cf3\b private\cf2\b0  Integer \cf4 age\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2     \cf1\b @\cf2 Temporal(TemporalType.DATE)\cf0\par
+\cf2\b0     \cf3\b private\cf2\b0  Date \cf4 birthDate\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2     \cf7 // other fields, getters and setters\cf0\par
+\cf2\}\par
+\cf0\f0\fs28\par
+However, with JPA 2.2, we also have support for java.time.LocalDate, java.time.LocalTime, java.time.LocalDateTime, java.time.OffsetTime and java.time.OffsetDateTime.\par
+\par
+\cf9\b @Enumerated annotation:  \cf0\b0 is used to persist a Java enum type.\par
+We can use the @Enumerated annotation to specify whether the enum should be persisted by name or by ordinal (default):\par
+\par
+\cf3\b\f1\fs24 public\cf2\b0  \cf3\b enum\cf2\b0  Gender \{\cf0\par
+\cf2  \cf4\b\i MALE\cf2\b0\i0 , \cf0\par
+\cf2  \cf4\b\i FEMALE\cf0\b0\i0\par
+\cf2\}\cf0\par
+\cf1 @Entity\cf0\par
+\cf1 @Table\cf2 (name=\cf6 "STUDENT"\cf2 )\cf0\par
+\cf3\b public\cf2\b0  \cf3\b class\cf2\b0  Student \{\cf0\par
+\cf2   \cf1 @Id\cf0\par
+\cf2   \cf1 @GeneratedValue\cf2 (strategy=GenerationType.\cf4\b\i AUTO\cf2\b0\i0 )\cf0\par
+\cf2   \cf3\b private\cf2\b0  Long \cf4 id\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2   \cf1 @Column\cf2 (name=\cf6 "STUDENT_NAME"\cf2 , length=50, nullable=\cf3\b false\cf2\b0 , \line\f2\lang1033   \f1\lang9 unique=\cf3\b false\cf2\b0 )\cf0\par
+\cf2   \cf3\b private\cf2\b0  String \cf4 name\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2   \cf1 @\cf2 Transient\cf0\par
+\cf2   \cf3\b private\cf2\b0  Integer \cf4 age\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2   \cf1 @\cf2 Temporal(TemporalType.DATE)\cf0\par
+\cf2   \cf3\b private\cf2\b0  Date \cf4 birthDate\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2\b   \cf1 @\cf2 Enumerated(EnumType.STRING)\cf0\par
+\cf2\b0   \cf3\b private\cf2\b0  Gender \cf4 gender\cf2 ;\cf0\par
+\cf2     \cf0\par
+\cf2   \cf7 //other fields, getters and setters\cf0\par
+\cf2\}\cf0\par
+\f0\fs28\par
+Actually, we don't have to specify the @Enumerated annotation at all if we're going to persist the Gender by the enum\lquote s ordinal.\par
+\par
+However, to persist the Gender by enum name, we've configured the annotation with EnumType.STRING.\par
+\par
+--------------------------------------------------------------------------\par
+
+\pard\sl240\slmult1\qc\b\fs40 JAX-RS Annotations\b0\fs28\par
+
+\pard\sl240\slmult1 JAX-RS stands for JAVA API for RESTful Web Services. \par
+JAX-RS is a JAVA based programming language API and specification to provide support for created RESTful Web Services. \par
+Its 2.0 version was released on the 24th May 2013. JAX-RS uses annotations available from Java SE 5 to simplify the \par
+development of JAVA based web services creation and deployment. It also provides supports for creating clients for \par
+RESTful Web Services. Below Annotation & Description\par
+\par
+01: @Path: Relative path of the resource class/method.\par
+\par
+02: @GET: HTTP Get request, used to fetch resource.\par
+\par
+03: @PUT: HTTP PUT request, used to update resource.\par
+\par
+04: @POST: HTTP POST request, used to create a new resource.\par
+\par
+05: @DELETE: HTTP DELETE request, used to delete resource.\par
+\par
+06: @HEAD: HTTP HEAD request, used to get status of method availability.\par
+\par
+07: @Produces: States the HTTP Response generated by web service. For example, APPLICATION/XML, TEXT/HTML, APPLICATION/JSON etc.\par
+\par
+08: @Consumes: States the HTTP Request type. For example, application/x-www-formurlencoded to accept form data in HTTP body during POST request.\par
+\par
+09: @PathParam: Binds the parameter passed to the method to a value in path.\par
+\par
+10: @QueryParam: Binds the parameter passed to method to a query parameter in the path.\par
+\par
+11: @MatrixParam: Binds the parameter passed to the method to a HTTP matrix parameter in path.\par
+\par
+12: @HeaderParam: Binds the parameter passed to the method to a HTTP header.\par
+\par
+13: @CookieParam: Binds the parameter passed to the method to a Cookie.\par
+\par
+14: @FormParam: Binds the parameter passed to the method to a form value.\par
+\par
+15: @DefaultValue: Assigns a default value to a parameter passed to the method.\par
+\par
+16: @Context: Context of the resource. For example, HTTPRequest as a context.\par
+\par
+\par
+\par
+----------------------------------------------------------------------\par
+{{\field{\*\fldinst{HYPERLINK https://dotnettutorials.net/lesson/servlet-annotations/ }}{\fldrslt{https://dotnettutorials.net/lesson/servlet-annotations/\ul0\cf0}}}}\f0\fs28\par
+\par
+
+\pard\sl240\slmult1\qc\b\fs40 Servlet Annotations with Examples\par
+
+\pard\sl240\slmult1\b0\fs28\par
+Why Servlet Annotations?\par
+Types of Annotations\par
+@WebServlet Annotation with Example\par
+@WebInitParam Annotation with Example\par
+@WebFilter Annotation with Example\par
+@WebListener Annotation with Example\par
+\par
+Why Servlet Annotations?\par
+Servlet Annotations are introduced in Servlet API 2.5 (JEE 5.0, JSE 5.0). These annotations are used to avoid writing the web.xml file. The javax.servlet.annotation package contains a number of annotations that allow users to use annotations to declare servlets, filters, listeners, and specify the metadata for the declared component. The annotated classes will be processed by the Servlet Containers at the time of application deployment.\par
+\par
+Types of Annotations\par
+HandlesTypes: It is used to declare the class types that a ServletContainerInitializer can handle.\par
+HttpConstraint: It is used within the ServletSecurity annotation to represent the security constraints to be applied to all HTTP protocol methods for which a corresponding HttpMethodConstraint element does NOT occur within the ServletSecurity annotation.\par
+HttpMethodConstraint: It is used within the ServletSecurity annotation to represent security constraints on specific HTTP protocol messages.\par
+MultipartConfig: It may be specified on a servlet class, indicating that instances of the Servlet except for requests that conform to the multipart/form-data MIME tags.\par
+ServletSecurity: It is used on a servlet implementation class to specify security constraints to be enforced by a Servlet container on HTTP protocol messages.\par
+WebFilter: It is used to declare a servlet filter.\par
+WebInitParam: It is used on a Servlet or Filter implementation class to specify an initialization parameter.\par
+WebServlet: It is used to declare a servlet.\par
+WebListener: It is used to declare a Web Listener.\par
+@WebServlet Annotation\par
+@WebServlet annotation is used to declare a Servlet. This annotation is processed by the container at deployment time and the corresponding servlet made available at the specified URL patterns.\par
+\par
+Syntax:\par
+@WebServlet(\par
+       attribute1=value1,\par
+       attribute2=value2,\par
+       \'85\'85\'85.\par
+)\par
+public class TheServlet extends javax.servlet.http.HttpServlet(\par
+       //servlet code\par
+\}\par
+\par
+Attributes of @WebServlet Annotation\par
+asyncSupported: It declares whether the servlet supports asynchronous operation mode.\par
+description: It gives the description of the servlet.\par
+displayName: It gives the display name of the servlet.\par
+initParams: It gives the init parameters of the servlet\par
+largeIcon: It gives the large-icon of the servlet\par
+loadOnStartup: It gives the load-on-startup order of the servlet\par
+name: It gives the name of the servlet.\par
+smallIcon: It gives the small-icon of the servlet.\par
+urlPatterns: It gives the URL patterns of the servlet.\par
+value: It gives the Array of URL patterns.\par
+@WebServlet Annotation Example:\par
+SimpleWebServlet.java\par
+\par
+import java.io.IOException;\par
+import java.io.PrintWriter;\par
+import javax.servlet.ServletException;\par
+import javax.servlet.annotation.WebServlet;\par
+import javax.servlet.http.HttpServlet;\par
+import javax.servlet.http.HttpServletRequest;\par
+import javax.servlet.http.HttpServletResponse;\par
+@WebServlet("/SimpleWebServlet") \par
+public class SimpleWebServlet extends HttpServlet\par
+\{\par
+    private static final long serialVersionUID = 1L;\par
+    public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException\par
+    \{\par
+        response.setContentType ("text/html");\par
+        PrintWriter out = response.getWriter ();\par
+        out.print ("<html><body>");\par
+        out.print ("<h3>Hello Servlet</h3>");\par
+        out.print ("</body></html>");\par
+    \}\par
+\}\par
+Output\par
+\par
+@WebServlet Annotation Example\par
+\par
+@WebInitParam Annotation\par
+@WebInitParam is used on a Servlet or Filter implementation class to specify an initialization parameter for a servlet or filter. It is used in conjunction with @WebServlet and @WebFilter annotations.\par
+\par
+Syntax:\par
+@WebInitParam(\par
+        name = <name>,\par
+        value = <value>,\par
+        description = <value>\par
+)\par
+\par
+\par
+ \par
+\par
+ \par
+Attributes of @WebInitParam Annotation\par
+name: It gives the name of the parameter\par
+value: It gives the value of the parameter\par
+description: It gives the description of the parameter\par
+@WebInitParam Annotation Example in Servlet\par
+Simple.java\par
+\par
+import java.io.IOException;\par
+import java.io.PrintWriter;\par
+import javax.servlet.ServletException;\par
+import javax.servlet.annotation.WebInitParam;\par
+import javax.servlet.annotation.WebServlet;\par
+import javax.servlet.http.HttpServlet;\par
+import javax.servlet.http.HttpServletRequest;\par
+import javax.servlet.http.HttpServletResponse;\par
+@WebServlet(value = "/Simple", initParams = \{ @WebInitParam(name = "foo", value = "Hello "), @WebInitParam(name = "bar", value = " World!") \})\par
+public class Simple extends HttpServlet\par
+\{\par
+    private static final long serialVersionUID = 1L;\par
+    protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException\par
+    \{\par
+        response.setContentType ("text/html");\par
+        PrintWriter out = response.getWriter ();\par
+        out.print ("<html><body>");\par
+        out.print ("<h3>Hello Servlet</h3>");\par
+        out.println (getInitParameter ("foo"));\par
+        out.println (getInitParameter ("bar"));\par
+        out.print ("</body></html>");\par
+    \}\par
+\}\par
+Output\par
+\par
+@WebInitParam Annotation Example in Servlet\par
+\par
+@WebFilter Annotation\par
+@WebFilter annotation is processed by the container at deployment time and the corresponding filter applied to the specified URL patterns, servlets, and dispatcher types.\par
+\par
+Syntax:\par
+@WebFilter(\par
+       attribute1=value1,\par
+       attribute2=value2,\par
+        \'85\'85\'85\par
+)\par
+public class Thefilter implements javax.servlet.Filter\{\par
+         //implements Filter\rquote s methods : init(), doFilter() and destroy()\par
+\}\par
+\par
+Attributes of @WebFilter Annotation\par
+asyncSupported: It declares whether the servlet supports asynchronous operation mode.\par
+description: It gives the description of the servlet.\par
+dispatcherTypes: It gives the dispatcher types to which the filter applies.\par
+displayName: It gives the display name of the servlet.\par
+filterName: It gives the name of the filter.\par
+initParams: It gives the init parameters of the servlet\par
+largeIcon: It gives the large-icon of the servlet.\par
+servletNames: It gives the name of the servlets to which the filter applies.\par
+smallIcon: It gives the small-icon of the servlet.\par
+urlPatterns: It gives the URL patterns of the servlet.\par
+value: It gives the Array of URL patterns.\par
+@WebFilter Annotation Example in Servlet\par
+LogFilter.java\par
+\par
+import java.io.IOException;\par
+import javax.servlet.annotation.WebFilter;\par
+import javax.servlet.annotation.WebInitParam;\par
+import javax.servlet.*;\par
+import java.util.*;\par
+// Implements Filter class\par
+@WebFilter(urlPatterns = \{ "/*" \}, initParams = \{@WebInitParam(name = "test-param", value = "Initialization Paramter") \})\par
+public class LogFilter implements Filter\par
+\{\par
+    public void init (FilterConfig config) throws ServletException\par
+    \{\par
+        // Get init parameter\par
+        String testParam = config.getInitParameter ("test-param");\par
+        // Print the init parameter\par
+        System.out.println ("Test Param: " + testParam);\par
+    \}\par
+    public void doFilter (ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException\par
+    \{\par
+        // Log the current timestamp.\par
+        System.out.println ("Time " + new Date ().toString ());\par
+        // Pass request back down the filter chain\par
+        chain.doFilter (request, response);\par
+    \}\par
+    public void destroy ()\par
+    \{\par
+        /*\par
+        * Called before the Filter instance is removed from service by the web\par
+        * container\par
+        */\par
+    \}\par
+\}\par
+Output\par
+Run above Simple.java as usual where you will get the following output:\par
+\par
+@WebFilter Annotation Example in Servlet\par
+\par
+Now open your console, where you will get the following output with the value of testparam and current timestamp along with servlet notification.\par
+\par
+Attributes of @WebFilter Annotation\par
+\par
+\par
+ \par
+\par
+ \par
+@WebListener Annotation\par
+@WebListener annotation is used to register a class as a listener of a web application. Any class annotated with WebListener must implemented one or more of the ServletContextListener, ServletContextAttributeListener, servletRequestListener, ServletRequestAttributeListener, HttpSessionListener, or HttpSessionAttributeListener interfaces.\par
+\par
+Syntax:\par
+@WebListener(\par
+Attribute1 = value1,\par
+Attribute2 = value2\par
+\'85\'85\'85.\par
+)\par
+public class WebListenerExample implements HttpSessionListener, HttpSessionAttributeListener \{\par
+//code\par
+\}\par
+\par
+Attributes of @WebListener Annotation\par
+value: It gives the description of the listener.\par
+@WebListener Annotation Example in Servlet\par
+ListenerTester.java\par
+\par
+import java.io.IOException;\par
+import java.io.PrintWriter;\par
+import javax.servlet.annotation.WebServlet;\par
+import javax.servlet.ServletException;\par
+import javax.servlet.http.HttpSession;\par
+import javax.servlet.http.HttpServlet;\par
+import javax.servlet.http.HttpServletRequest;\par
+import javax.servlet.http.HttpServletResponse;\par
+@WebServlet (name = "ListenerTester", urlPatterns = "/listener")\par
+public class ListenerTester extends HttpServlet\par
+\{\par
+    public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException\par
+    \{\par
+        response.setContentType ("text/html");\par
+        PrintWriter out = response.getWriter ();\par
+        HttpSession session = request.getSession ();\par
+        out.println("<h3>This is a simple example of @WebServlet with @WebListener</h3>");\par
+        session.setAttribute ("info", "My Info");\par
+        String s = (String) session.getAttribute ("info");\par
+        out.println ("<br>Attribute value that you have set = " + s);\par
+        session.setAttribute ("info", "Your Info");\par
+        String s1 = (String) session.getAttribute ("info");\par
+        out.println ("<br>Attribute value has replaced by = " + s1);\par
+        session.removeAttribute ("info");\par
+        session.invalidate ();\par
+    \}\par
+    public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException\par
+    \{\par
+        doGet (request, response);\par
+    \}\par
+\}\par
+WebListenerExample.java\par
+import javax.servlet.annotation.WebListener;\par
+import javax.servlet.http.HttpSessionAttributeListener;\par
+import javax.servlet.http.HttpSessionBindingEvent;\par
+import javax.servlet.http.HttpSessionEvent;\par
+import javax.servlet.http.HttpSessionListener;\par
+@WebListener()\par
+public class WebListenerExample implements HttpSessionListener, HttpSessionAttributeListener\par
+\{\par
+    public void sessionCreated (HttpSessionEvent he)\par
+    \{\par
+        System.out.println ("Session is created");\par
+    \}\par
+    public void sessionDestroyed (HttpSessionEvent he)\par
+    \{\par
+        System.out.println ("Session is destroyed");\par
+    \}\par
+    public void attributeAdded (HttpSessionBindingEvent arg0)\par
+    \{\par
+        System.out.println ("value is added");\par
+    \}\par
+    public void attributeRemoved (HttpSessionBindingEvent arg0)\par
+    \{\par
+        System.out.println ("value is removed");\par
+    \}\par
+    public void attributeReplaced (HttpSessionBindingEvent arg0)\par
+    \{\par
+        System.out.println ("value has been replaced");\par
+    \}\par
+\}\par
+web.xml\par
+Here <listener></listener> entry is not required in web.xml file but in the older version, you were bound to map this entry into web.xml file.\par
+\par
+<?xml version="1.0" encoding="UTF-8"?>\par
+<web-app\par
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\par
+ xmlns="{{\field{\*\fldinst{HYPERLINK http://java.sun.com/xml/ns/javaee }}{\fldrslt{http://java.sun.com/xml/ns/javaee\ul0\cf0}}}}\f0\fs28 "\par
+ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee {{\field{\*\fldinst{HYPERLINK http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd }}{\fldrslt{http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd\ul0\cf0}}}}\f0\fs28 " id="WebApp_ID" version="2.5">\par
+ <display-name>servletAnnotationExample</display-name>\par
+ <listener>\par
+  <listener-class>WebListenerExample</listener-class>\par
+ </listener>\par
+ <servlet>\par
+  <servlet-name>ListenerTester</servlet-name>\par
+  <servlet-class>ListenerTester</servlet-class>\par
+ </servlet>\par
+ <servlet-mapping>\par
+  <servlet-name>ListenerTester</servlet-name>\par
+  <url-pattern>/listener</url-pattern>\par
+ </servlet-mapping>\par
+</web-app>\par
+Output\par
+Execute your code and you will get the following code.\par
+\par
+@WebListener Annotation Example in Servlet\par
+\par
+And on the console, you will get the following message\par
+\par
+Servlet Annotations with Examples\par
+\par
+--------------------------------------------------------------------------\par
+
+\pard\sl240\slmult1\qc\b\fs40 JMS (Java Messaging Service) Annotation\par
+
+\pard\sl240\slmult1\fs28 @SpringBootApplication \b0 is an annotation that adds all of the following:\par
+\par
+\cf9\b @Configuration : \cf0\b0 makes the class as a source of bean definitions for the application context.\par
+\par
+\cf9\b @EnableAutoConfiguration :\b0  \cf0 enables Spring boot to add beans presents in classpath setting and various property setting.\par
+This flags the application as a web application and activates key behaviors such as setting up a DispatcherServlet.\par
+\par
+\cf9\b @ComponentScan :  \cf0\b0 tells Spring to look for other components, configurations, and services in the default package, allowing it to find the controllers.\par
+If specific packages are not defined, scanning will occur from the package of the class that declares this annotation.\par
+\par
+\cf9\b @EnableJMS : \cf0\b0 annotation is used to trigger search for method annotated with @JMSListener, hence to create JMS listener in the background.\par
+\par
+\cf9\b @JMSListner : \cf0\b0 This Annotation is actually used to mark a method to be the target of a JMS message listener on the specified destination().\par
+\par
+\par
+\par
+\b\fs32 @Controller VS @RestController: \par
+\cf9\fs28 @Controller \cf0\b0 is used to mark classes as Spring MVC Controller.\par
+\cf9\b @RestController \cf0\b0 is a convenience annotation that does nothing more than adding the @Controller and @ResponseBody annotations.\par
+-------------------------------------------------------------------\par
+
+\pard\sl240\slmult1\qc\b\fs40 HTTP Code & Description\par
+
+\pard\sl240\slmult1\b0\fs28 01: \cf9\b 200\cf0\b0\par
+OK - shows success.\par
+\par
+02: \cf9\b 201\cf0\b0\par
+CREATED - when a resource is successfully created using POST or PUT request. Returns link to the newly created resource using the location header.\par
+\par
+03: \cf9\b 204\cf0\b0\par
+NO CONTENT - when response body is empty. For example, a DELETE request.\par
+\par
+04: \cf9\b 304\cf0\b0\par
+NOT MODIFIED - used to reduce network bandwidth usage in case of conditional GET requests. Response body should be empty. Headers should have date, location, etc.\par
+\par
+05: \cf9\b 400\cf0\b0\par
+BAD REQUEST - states that an invalid input is provided. For example, validation error, missing data.\par
+\par
+06: \cf9\b 401\cf0\b0\par
+UNAUTHORIZED - states that user is using invalid or wrong authentication token.\par
+\par
+07: \cf9\b 403\cf0\b0\par
+FORBIDDEN - states that the user is not having access to the method being used. For example, Delete access without admin rights.\par
+\par
+08: \cf9\b 404\cf0\b0\par
+NOT FOUND - states that the method is not available.\par
+\par
+09: \cf9\b 409\cf0\b0\par
+CONFLICT - states conflict situation while executing the method. For example, adding duplicate entry.\par
+\par
+10: \cf9\b 500\cf0\b0\par
+INTERNAL SERVER ERROR - states that the server has thrown some exception while executing the method.\par
+\par
+\par
+---------------------------------------------------\par
+\par
+\f3\endash  @Entity annotation indicates that the class is a persistent Java class.\par
+\endash  @Table annotation provides the table that maps this entity.\par
+\endash  @Id annotation is for the primary key.\par
+\endash  @Column annotation is used to define the column in database that maps annotated field.\par
+\par
+\f0\par
+\par
+\par
+}
+ 
